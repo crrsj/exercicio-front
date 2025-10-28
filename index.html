@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>exericico</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+<style>
+
+    body{
+        background-color:black;
+        border-radius: 2%;
+    }
+h1{
+    color: rgb(196, 127, 0);
+   text-align: center;
+   padding-top: 5%;
+}
+input{
+   margin-top: 10%;
+  
+}
+.modal-body{
+  background-color: white;
+}
+</style>
+<body>
+ <h1>Construindo uma Aplicação</h1> 
+<div class="container">
+<div class="row">
+  <div class="col">    
+    <input type="text" class="form-control" id="nome" placeholder="Nome" aria-label="Nome">
+  </div>
+  <div class="col">
+    <input type="text" class="form-control" id="telefone" placeholder="Telefone" aria-label="Telefone">
+ </div> 
+</div><br>
+<div class="row ">  
+  <div class="col-md">
+    <div class="form-floating">
+      <select class="form-select" id="veiculo">
+        <option selected>Selecione una opção...</option>
+        <option value="CLASSIC">Classic</option>
+        <option value="CRUIZE">Cruize</option>
+        <option value="ONIX">Onix</option>
+      </select>
+      <label for="floatingSelectGrid">Modelo do veículo:</label>
+    </div>
+  </div>
+</div>
+ <div class="row">
+  <div class="col">    
+    <input type="number" class="form-control" id="anoModelo" placeholder="Ano do modelo" aria-label="Placa do veículo">
+  </div>
+  <div class="col">
+    <input type="text" class="form-control" id="placa" placeholder="Placa do veículo" aria-label="Placa do veículo">
+ </div> 
+</div><br>
+
+ <div class="form-floating mb-3">
+  <textarea class="form-control" placeholder="Descreva o serviço" id="descricao" style="height: 100px"></textarea>
+  <label for="descricao">Descrição do serviço</label>  
+</div> 
+  <div class="col">    
+    <input type="number" class="form-control" id="valor" placeholder="valor" aria-label="Valor">
+  </div> <br>
+
+  <div class="d-grid gap-2 col-6 mx-auto">
+  <button class="btn btn-primary" type="button" onclick="enviarFormulario()">Salvar</button>
+ 
+</div><br>
+<table class="table table-striped table-hover" id="tabelaFuncionarios">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Nome</th>
+      <th scope="col">Telefone</th>
+      <th scope="col">Veiculo</th>
+      <th scope="col">Ano do modelo</th>
+      <th scope="col">Placa</th>
+      <th scope="col">Descricao</th>
+      <th scope="col">Valor</th>
+      <th scope="col">Editar</th>
+      <th scope="col">Excluir</th>
+    </tr>
+  </thead>
+  <tbody>
+ 
+  </tbody>
+</table>
+
+
+</div>  
+    
+     <div class="modal" tabindex="-1" id="myModal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Atualizar clientes</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>           
+            <div class="modal-body">
+                <form id="myInput">
+                    <div class="row">
+                      <label for="id" class="form-label">ID</label>
+                      <input type="text" class="form-control" id="id" readonly>
+                    
+                    </div>
+                    <div class="row">
+                        <label for="nome" class="form-label">Nome</label>
+                        <input type="text" class="form-control" id="novo-nome">
+                       
+                    </div>
+                     <div class="row">
+                        <label for="telefone" class="form-label">Telefone</label>
+                        <input type="text" class="form-control" id="novo-telefone">
+                      
+                     </div>
+                     <div class="row">
+                     <label for="veiculo" class="form-label">Veiculo</label>
+                      <select class="form-select" id="novo-veiculo" >                      
+                        <option value="CLASSIC">Classic</option>
+                        <option value="CRUIZE">Cruize</option>     
+                        <option value="ONIX">Onix</option>     
+                      </select>
+                      </div>                   
+                      <div class="row">
+                        <label for="anoModelo" class="form-label">Ano do modelo</label>
+                        <input type="number" class="form-control" id="novo-anoModelo">                        
+                      </div>                      
+                      <div class="row">
+                        <label for="placa" class="form-label">Placa</label>
+                        <input type="text" class="form-control" id="nova-placa">                        
+                     </div>
+                     <div class="row">
+                        <label for="descricao" class="form-label">Descrição</label>
+                       <textarea class="form-control" id="nova-descricao" rows="3"></textarea>                        
+                      </div>
+                      <div class="row">
+                        <label for="valor" class="form-label">Valor</label>
+                        <input type="number" class="form-control" id="novo-valor">
+                       
+                      </div>
+               </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" onclick="updateUserData()">Atualizar</button>
+            </div>
+          </div>
+        </div>
+      </div>     
+ <script>
+  
+function enviarFormulario() {
+  const dadosFormulario = {
+    nome: document.getElementById("nome").value,
+    telefone: document.getElementById("telefone").value,
+    veiculo: document.getElementById("veiculo").value,
+    anoModelo: document.getElementById("anoModelo").value,
+    placa: document.getElementById("placa").value,
+    descricao: document.getElementById("descricao").value,
+    valor: document.getElementById("valor").value
+  };
+
+  fetch("http://localhost:8080/clientes", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(dadosFormulario)
+  })
+  .then(async response => {
+    const text = await response.text();
+    let data;
+    try {
+      data = text ? JSON.parse(text) : {};
+    } catch (e) {
+      data = { message: text };
+    }
+
+    if (!response.ok) {
+      console.error("Erro do backend:", data);
+
+      // ✅ Trata erros de validação do Spring Boot
+      if (data.errors && Array.isArray(data.errors)) {
+        const mensagens = data.errors
+          .map(err => `${err.field}: ${err.defaultMessage}`)
+          .join("\n");
+        alert("Erros de validação:\n" + mensagens);
+      } else if (data.message) {
+        alert("Erro: " + data.message);
+      } else {
+        alert("Erro desconhecido ao enviar os dados");
+      }
+      return;
+    }
+
+    alert("Dados cadastrados com sucesso!");
+    console.log("Dados enviados com sucesso:", data);
+    location.reload();
+  })
+  .catch(error => {
+    console.error("Erro na requisição:", error);
+    alert("Falha ao enviar os dados. Verifique o console para detalhes.");
+  });
+}
+
+
+function exibirFuncionarios() {
+    fetch("http://localhost:8080/clientes")
+    .then(response => response.json())
+    .then(data => {
+        const tabela = document.getElementById("tabelaFuncionarios");
+        const tbody = tabela.querySelector("tbody");
+       
+        data.forEach(funcionario => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${funcionario.id}</td>
+                <td>${funcionario.nome}</td>
+                <td>${funcionario.telefone}</td>
+                <td>${funcionario.veiculo}</td>
+                <td>${funcionario.anoModelo}</td>
+                <td>${funcionario.placa}</td>
+                <td>${funcionario.descricao}</td>
+                <td>${funcionario.valor}</td>             
+                <td><button class="btn btn-success" onClick="buscarPorId(${funcionario.id})">Editar</button></td>
+                <td><button class="btn btn-danger" onClick="deletarRegistro(${funcionario.id})">Excluir</button></td>
+            `;
+            tbody.appendChild(row);
+        });
+       
+    })
+    .catch(error => {
+        console.error("Erro ao buscar os registros:", error);
+    });
+
+    
+}
+  
+
+ 
+
+    async function deletarRegistro(id) {
+    try {
+        
+        const url = `http://localhost:8080/clientes/${id}`;
+  
+        
+        const confirmacao = confirm("Tem certeza que deseja excluir o registro?");
+  
+        
+        if (confirmacao) {
+            const options = {
+                method: 'DELETE'
+            };
+  
+            const response = await fetch(url, options);
+            if (!response.ok) {
+                throw new Error('Erro ao deletar o registro');
+            }
+  
+            alert('Registro deletado com sucesso');
+            location.reload();
+
+        } else {
+            console.log('Exclusão cancelada pelo usuário');
+            
+        }
+    } catch (error) {
+        console.error('Erro:', error);
+        
+    }
+    
+  }
+
+
+function showModal() {
+    var myModal = document.getElementById('myModal');
+    if (myModal) {
+        var myInput = document.getElementById('myInput');
+        if (myInput) {
+            myModal.addEventListener('shown.bs.modal', function () {
+                myInput.focus();
+            });
+            var modalInstance = new bootstrap.Modal(myModal);
+            modalInstance.show();
+        } else {
+            console.error("Elemento 'myInput' não encontrado.");
+        }
+    } else {
+        console.error("Elemento 'myModal' não encontrado.");
+    }
+}
+  function buscarPorId(id) {
+    fetch('http://localhost:8080/clientes/' + id)
+     .then(response => response.json())    
+     .then(user => {
+       preencherFormulario(user) ;
+       showModal();
+     
+     })
+     .catch(error => console.error('Error fetching user data:', error));
+ }
+ 
+   function preencherFormulario(user) {
+   document.getElementById('id').value = user.id;
+   document.getElementById('novo-nome').value = user.nome;
+   document.getElementById('novo-telefone').value = user.telefone;
+   document.getElementById('novo-veiculo').value = user.veiculo;
+   document.getElementById('novo-anoModelo').value = user.anoModelo;
+   document.getElementById('nova-placa').value = user.placa;
+   document.getElementById('nova-descricao').value = user.descricao;
+   document.getElementById('novo-valor').value = user.valor;
+ 
+ }
+
+ 
+   async function updateUserData() {    
+    const idInput =  document.getElementById("id");
+    const nomeInput = document.getElementById("novo-nome");   
+    const telefoneInput = document.getElementById("novo-telefone");
+    const veiculoInput = document.getElementById("novo-veiculo");
+    const anoModeloInput = document.getElementById("novo-anoModelo");
+    const placaInput = document.getElementById("nova-placa");    
+    const descricaoInput = document.getElementById("nova-descricao");
+    const valorInput = document.getElementById("novo-valor");
+      
+       
+      
+    const updateId =  idInput.value    
+    const updateNome = nomeInput.value
+    const updateTelefone = telefoneInput.value
+    const updateVeiculo = veiculoInput.value
+    const updateAnoModelo = anoModeloInput.value   
+    const updatePlaca = placaInput.value
+    const updateDescricao = descricaoInput.value
+    const updateValor = valorInput.value
+  
+   
+  
+    try {
+      const response =  await fetch( `http://localhost:8080/clientes/${updateId}`, {
+        method: 'PUT', 
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: updateId,
+          nome: updateNome,         
+          telefone:updateTelefone ,
+          veiculo: updateVeiculo,
+          anoModelo: updateAnoModelo,
+          placa: updatePlaca,
+          descricao: updateDescricao,
+          valor: updateValor,
+          
+          
+          
+          
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Erro na requisição: ${response.status} - ${response.statusText}`);
+      }
+  
+      alert('Dados do usuário atualizados com sucesso!');
+      location.reload();
+    } catch (error) {
+      console.error(`Erro durante a atualização dos dados: ${error.message}`);
+    }
+    
+    
+  }
+
+  exibirFuncionarios();
+
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>  
+</body>
+</html>
